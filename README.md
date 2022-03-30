@@ -21,8 +21,8 @@ npm run lint
 ```
 
 ### Data structure
-See src/mock/index.js
+- /mock/index.js
 
 ### Router
-/queryPage/test
-/queryConfig/edit/test
+- /queryPage/test
+- /queryConfig/edit/test
