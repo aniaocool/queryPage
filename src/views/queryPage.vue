@@ -60,6 +60,7 @@
           :sortable="item.sortable"
           :prop="item.prop"
           :width="item.width"
+          :min-width="item.minWidth"
           header-align="center"
           resizable
           show-overflow-tooltip

@@ -49,10 +49,7 @@ export const results = {
       },
       {
         chineseName: "状态",
-        controlData: [
-          { name: "成功", value: "1" },
-          { name: "失败", value: "2" },
-        ],
+        controlData: '[{"name":"成功","value":"1"},{"name":"失败","value":"2"}]',
         controlDataUrl: "",
         controlType: "Select",
         defaultValue: "1",
@@ -69,10 +66,7 @@ export const results = {
       },
       {
         chineseName: "多选状态",
-        controlData: [
-          { name: "成功", value: 1 },
-          { name: "失败", value: 2 },
-        ],
+        controlData: '[{"name":"成功","value":"1"},{"name":"失败","value":"2"}]',
         controlDataUrl: "",
         controlType: "MulSelect",
         defaultValue: "",
@@ -256,7 +250,6 @@ export const results = {
       },
     ],
     gridWidth: "100%",
-    htmlContent: "isolate",
     id: 1,
     pageKey: "test",
     pageName: "我的测试",

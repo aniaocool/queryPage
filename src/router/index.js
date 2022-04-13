@@ -28,6 +28,11 @@ const routes = [
         },
         component: () =>
           import(/* webpackChunkName: "about" */ "../views/queryPage.vue"),
+      },
+      {
+        path:'/queryConfig/edit/:pagekey',
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../views/queryPageConfig.vue"),
       }
     ],
   },
