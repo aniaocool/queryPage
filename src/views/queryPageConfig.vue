@@ -418,7 +418,6 @@ export default {
         "api/queryData/" + this.queryConfig.pageKey;
       this.queryConfig.controller = this.queryConfig.pageKey + "Ctrl";
     },
-    save() {},
     //添加自定义按钮
     addButton() {
       let length = this.queryConfig.buttons.length + 1;
