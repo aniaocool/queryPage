@@ -306,7 +306,7 @@ export default {
       }
       this.loading = true;
       this.tableData = [];
-
+      console.log("queryTableData params", params);
       //模拟数据请求
       this.axios.post("/api/queryTableData", params).then((res) => {
         this.showTable = true;
@@ -315,9 +315,15 @@ export default {
       });
     },
     //头部搜索
-    queryData(params) {
+    queryData(params, isReset, isHandleSearch) {
+      //重置或手动搜索 设置页码为1
+      if (isReset || isHandleSearch) {
+        sessionStorage.setItem(this.pageKey + "-pageno", 1);
+      }
       let queryParams = {
-        pageNo: 1,
+        pageNo: isReset
+          ? 1
+          : parseInt(sessionStorage.getItem(this.pageKey + "-pageno")) || 1,
         pageSize: this.pageSize,
         ...params,
       };
@@ -327,10 +333,20 @@ export default {
     indexMethod(index) {
       return (this.pageNo - 1) * this.pageSize + index + 1;
     },
-    handleSelectChange() {},
+    handleSelectChange(val) {
+      this.selectRows = val;
+    },
     handleSortChange() {},
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    handleSizeChange(val) {
+      this.queryParams.pageSize = val;
+      this.initTableData(this.queryParams);
+      sessionStorage.setItem(this.pageKey + "-pagesize", val);
+    },
+    handleCurrentChange(val) {
+      this.queryParams.pageNo = val;
+      this.initTableData(this.queryParams);
+      sessionStorage.setItem(this.pageKey + "-pageno", val);
+    },
     //固定列
     handlerFixed(val) {
       let data = false;

@@ -29,7 +29,7 @@
                 class="query-search-input"
                 v-model="queryParamCon[item.fieldName].value"
                 :placeholder="item.placeholder"
-                @keyup.enter.native="queryData()"
+                @keyup.enter.native="queryData(false, true)"
               ></el-input>
             </el-form-item>
             <!-- 选择框 -->
@@ -122,8 +122,8 @@
           <el-button @click="resetData()">重置</el-button>
           <el-button
             type="primary"
-            @click="queryData()"
-            @keyup.enter="queryData()"
+            @click="queryData(false, true)"
+            @keyup.enter="queryData(false, true)"
             >查询</el-button
           >
         </div>
@@ -143,6 +143,7 @@ export default {
       conditionData: [],
       value: {},
       conditionShow: false,
+      initParam: false,
     };
   },
   watch: {
@@ -152,8 +153,6 @@ export default {
           this.initConditionData(JSON.parse(JSON.stringify(value)));
         }
       },
-      deep: true,
-      immediate: true,
     },
   },
   methods: {
@@ -221,6 +220,35 @@ export default {
       this.queryData();
     },
     formatQueryParamCon() {
+      //读取session数据
+      if (!this.initParam) {
+        let sessionparamstr = sessionStorage.getItem(
+          this.$route.params.pagekey + "-params"
+        );
+        if (sessionparamstr) {
+          let sessionparams = JSON.parse(sessionparamstr);
+          Object.keys(sessionparams).forEach((key) => {
+            if (!this.queryParamCon[key]) {
+              this.queryParamCon[key] = { value: "" };
+            }
+            this.queryParamCon[key].value = sessionparams[key];
+          });
+        }
+        this.initParam = true;
+      }
+
+      //初始化查询数据存储session, 更新session数据
+      if (Object.keys(this.queryParamCon).length) {
+        let storgeParam = {};
+        Object.keys(this.queryParamCon).forEach((key) => {
+          storgeParam[key] = this.queryParamCon[key].value;
+        });
+        sessionStorage.setItem(
+          this.$route.params.pagekey + "-params",
+          JSON.stringify(storgeParam)
+        );
+      }
+
       let params = {};
       for (let key in this.queryParamCon) {
         (this.queryParamCon[key].value ||
@@ -229,7 +257,7 @@ export default {
       }
       return params;
     },
-    queryData() {
+    queryData(isReset, isHandleSearch) {
       let params = this.formatQueryParamCon();
       for (let item in params) {
         if (typeof params[item] == "string") {
@@ -239,14 +267,14 @@ export default {
           params[item] = params[item].toString();
         }
       }
-      this.$emit("queryData", params);
+      this.$emit("queryData", params, isReset, isHandleSearch);
       return params;
     },
     resetData() {
       for (let key in this.queryParamCon) {
         this.queryParamCon[key].value = this.queryParamCon[key].defaultValue;
       }
-      this.queryData();
+      this.queryData(true);
     },
   },
 };
